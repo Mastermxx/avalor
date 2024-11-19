@@ -1,8 +1,13 @@
+# Enforce consistent line endings
 * text=auto
-*.js text eol=lf
+
+# Ensure all TypeScript and JavaScript files use LF
 *.ts text eol=lf
 *.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+
+# Specific text files (optional)
 *.css text eol=lf
-*.json text eol=lf
-*.md text eol=lf
 *.html text eol=lf
+*.md text eol=lf

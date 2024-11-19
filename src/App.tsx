@@ -1,10 +1,18 @@
-import "./App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Layout from "./components/Layout";
+import HomePage from "./pages/HomePage";
+import DronePage from "./pages/DronePage";
 
 function App() {
   return (
-    <>
-      <div className="text-3xl font-bold underline">Hello Tailwind CSS!</div>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="/drones" element={<DronePage />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 
