@@ -7,6 +7,7 @@ import Stats from "../components/Stats";
 import CursorCoordinates from "../components/CursorCoords";
 import useDroneMovement from "../hooks/useDroneMovement";
 import DroneStats from "../components/DroneStats";
+import { useShallow } from "zustand/react/shallow";
 
 // Stores
 import useUIStore from '../store/useUIStore';
@@ -16,7 +17,10 @@ export default function DronePage() {
   const isStatsActive = useUIStore((state) => state.isStatsActive);
   const isControlActive = useUIStore((state) => state.isControlActive);
 
-  const drones = useDroneStore((state) => state.drones); // Get drones from the store
+  const [drones, selectDrone] = useDroneStore(
+    useShallow((state) => [state.drones, state.selectDrone])
+  ); // Get drones from the store
+
   const droneIcon = new L.Icon({
     iconUrl: DroneIcon,
     iconSize: [24, 24],
@@ -33,18 +37,21 @@ export default function DronePage() {
         zoom={13}
       >
         <CursorCoordinates />
+
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        <Marker position={position} icon={droneIcon}>
-          <Popup>Drone #1 : {position}</Popup>
-        </Marker>
-
         {drones.map((drone) => (
-          <Marker key={drone.id} position={drone.position} icon={droneIcon}>
-            <Popup className="absolute right-5">
+          <Marker
+            key={drone.id}
+            interactive
+            position={drone.position}
+            icon={droneIcon}
+            eventHandlers={{ click: (...args) => selectDrone(drone.id) }}
+          >
+            <Popup>
               <strong>Drone ID:</strong> {drone.id}
               <br />
               <strong>Latitude:</strong> {drone.position[0].toFixed(5)}
@@ -53,6 +60,7 @@ export default function DronePage() {
             </Popup>
           </Marker>
         ))}
+
       </MapContainer>
 
       <p className="
@@ -76,7 +84,14 @@ export default function DronePage() {
 
       <DroneStats />
 
-      Edit Speed: <input type="text" />
+
+
+      <div className="
+          absolute bottom-2 left-80 translate-x-[-50%] 
+          bg-stone-800 bg-opacity-60 text-white z-[1000] p-5 rounded-lg
+        ">
+        Edit Speed: <input type="text" />
+      </div>
 
     </div>
   );
