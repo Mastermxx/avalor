@@ -6,12 +6,17 @@ import DroneControls from "../components/DroneControls";
 import Stats from "../components/Stats";
 import CursorCoordinates from "../components/CursorCoords";
 import useDroneMovement from "../hooks/useDroneMovement";
+import DroneStats from "../components/DroneStats";
+
+// Stores
 import useUIStore from '../store/useUIStore';
+import useDroneStore from "../store/useDroneStore";
 
 export default function DronePage() {
   const isStatsActive = useUIStore((state) => state.isStatsActive);
   const isControlActive = useUIStore((state) => state.isControlActive);
 
+  const drones = useDroneStore((state) => state.drones); // Get drones from the store
   const droneIcon = new L.Icon({
     iconUrl: DroneIcon,
     iconSize: [24, 24],
@@ -27,7 +32,7 @@ export default function DronePage() {
         center={startPosition}
         zoom={13}
       >
-        <CursorCoordinates /> 
+        <CursorCoordinates />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -36,6 +41,18 @@ export default function DronePage() {
         <Marker position={position} icon={droneIcon}>
           <Popup>Drone #1 : {position}</Popup>
         </Marker>
+
+        {drones.map((drone) => (
+          <Marker key={drone.id} position={drone.position} icon={droneIcon}>
+            <Popup className="absolute right-5">
+              <strong>Drone ID:</strong> {drone.id}
+              <br />
+              <strong>Latitude:</strong> {drone.position[0].toFixed(5)}
+              <br />
+              <strong>Longitude:</strong> {drone.position[1].toFixed(5)}
+            </Popup>
+          </Marker>
+        ))}
       </MapContainer>
 
       <p className="
@@ -56,6 +73,10 @@ export default function DronePage() {
           <DroneControls onMove={moveTo} />
         </div>
       )}
+
+      <DroneStats />
+
+      Edit Speed: <input type="text" />
 
     </div>
   );
