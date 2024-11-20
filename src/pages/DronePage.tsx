@@ -6,8 +6,12 @@ import DroneControls from "../components/DroneControls";
 import Stats from "../components/Stats";
 import CursorCoordinates from "../components/CursorCoords";
 import useDroneMovement from "../hooks/useDroneMovement";
+import useUIStore from '../store/useUIStore';
 
 export default function DronePage() {
+  const isStatsActive = useUIStore((state) => state.isStatsActive);
+  const isControlActive = useUIStore((state) => state.isControlActive);
+
   const droneIcon = new L.Icon({
     iconUrl: DroneIcon,
     iconSize: [24, 24],
@@ -19,18 +23,18 @@ export default function DronePage() {
   return (
     <div className="relative">
       <MapContainer
-        className="h-full w-screen rounded-3xl"
+        className="h-full rounded-3xl w-[calc(100vw-160px)]"
         center={startPosition}
         zoom={13}
       >
-        <CursorCoordinates /> {/* Nested properly */}
+        <CursorCoordinates /> 
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
         <Marker position={position} icon={droneIcon}>
-          <Popup>Drone #1</Popup>
+          <Popup>Drone #1 : {position}</Popup>
         </Marker>
       </MapContainer>
 
@@ -41,8 +45,20 @@ export default function DronePage() {
         Latitude {position[0]}, Longitude {position[1]}
       </p>
 
-      <Stats />
-      <DroneControls onMove={moveTo} />
+      {isStatsActive && (
+        <div className="w-full">
+          <Stats />
+        </div>
+      )}
+
+      {isControlActive && (
+        <div className="w-full mt-4">
+          <DroneControls onMove={moveTo} />
+        </div>
+      )}
+
     </div>
   );
 }
+
+

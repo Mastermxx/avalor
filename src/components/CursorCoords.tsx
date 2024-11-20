@@ -31,6 +31,7 @@ const CursorCoordinates = () => {
           Latitude: {coords.lat.toFixed(5)}, Longitude: {coords.lng.toFixed(5)}
         </span>
       )}
+      {(coords.lat === null || coords.lng === null) && <span>Click on the map to see the Coordinates</span>}
     </div>
   );
 };

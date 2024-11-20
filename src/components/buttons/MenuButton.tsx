@@ -12,7 +12,7 @@ export default function Button({ children, Icon, Link }: ButtonProps) {
   return (
     <NavLink
       to={Link}
-      className={({ isActive }) => (isActive ? "group active" : "group")}
+      className={({ isActive }) => (isActive ? "group active" : 'border-2 border-[#262626]')}
     >
       <div className="
       flex flex-col justify-center text-center items-center

@@ -5,9 +5,10 @@ interface ToggleButtonProps {
   children: React.ReactNode;
   Icon: LucideIcon;
   onToggle: () => void;
+  isActive: boolean;
 }
 
-export function ToggleButton({ children, Icon, onToggle }: ToggleButtonProps) {
+export default function ToggleButton({ children, Icon, onToggle, isActive }: ToggleButtonProps) {
 
     const handleToggle = () => {
         onToggle();
@@ -16,12 +17,12 @@ export function ToggleButton({ children, Icon, onToggle }: ToggleButtonProps) {
   return (
     <button
       onClick={handleToggle}
-      className="
-      flex flex-col justify-center text-center items-center
-      w-20 h-20 p-5 rounded-lg text-sm
-      hover:bg-[#101010] hover:text-[#fafafa]
-      text-[#f8f8f8] bg-[#101010]
-      "
+      className={`
+        flex flex-col justify-center text-center items-center
+        w-20 h-20 p-5 rounded-lg text-sm
+        hover:bg-[#101010] hover:text-[#fafafa]
+        ${isActive ? 'bg-[#101010] text-[#fafafa]' : 'border-2 border-[#262626]'}
+      `}
     >
       <Icon />
       {children}
