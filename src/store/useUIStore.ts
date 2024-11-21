@@ -14,6 +14,9 @@ type UIState = {
   toggleMapLayer1: () => void;
   isMapLayer2Active: boolean;
   toggleMapLayer2: () => void;
+
+  isXmasActive: boolean;
+  toggleisXmasMode: () => void;
 };
 
 const useUIStore = create<UIState>((set) => ({
@@ -37,16 +40,12 @@ const useUIStore = create<UIState>((set) => ({
       isMapLayer2Active: false,
     })),
 
-  toggleMapLayer1: () => {
-    set(() => {
-      console.log("Activating Map Layer 1");
-      return {
-        isMapLayerDefaultActive: false,
-        isMapLayer1Active: true,
-        isMapLayer2Active: false,
-      };
-    });
-  },
+  toggleMapLayer1: () =>
+    set(() => ({
+      isMapLayerDefaultActive: false,
+      isMapLayer1Active: true,
+      isMapLayer2Active: false,
+    })),
 
   toggleMapLayer2: () =>
     set(() => ({
@@ -54,6 +53,10 @@ const useUIStore = create<UIState>((set) => ({
       isMapLayer1Active: false,
       isMapLayer2Active: true,
     })),
+
+  isXmasActive: true,
+  toggleisXmasMode: () => set((state) => ({ isXmasActive: !state.isXmasActive })),
+
 }));
 
 export default useUIStore;

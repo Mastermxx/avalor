@@ -5,7 +5,6 @@ import { Map as LeafletMap } from "leaflet";
 // Stores
 import useDroneStore, { Coordinates } from "../../store/useDroneStore";
 
-
 export const MapContext = createContext<LeafletMap | null>(null);
 
 export const useMapInstance = () => {

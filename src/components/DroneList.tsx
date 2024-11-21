@@ -41,12 +41,6 @@ export default function Dronelist() {
           <div className="mt-4">
             <div className="flex flex-col gap-2">
               <button
-                onClick={() => console.log("Edit Position for", selectedDroneId)}
-                className="bg-[#ff8f00] hover:bg-[#fdaf48] text-white p-2 rounded-lg w-full"
-              >
-                Edit Position
-              </button>
-              <button
                 onClick={() => removeDrone(selectedDroneId)} // Remove drone
                 className="bg-red-600 hover:bg-red-500 text-white p-2 rounded-lg w-full"
               >

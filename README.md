@@ -1,7 +1,7 @@
 
-# Vite React + TypeScript + Tailwind CSS Boilerplate
+# Drone Tracker Dashboard
 
-This is a boilerplate project built with **Vite**, **React**, **TypeScript**, and **Tailwind CSS**. It includes essential configurations for ESLint and Prettier to maintain code quality and consistency.
+This project is a **Drone Tracker Dashboard** built with **Vite**, **React**, **TypeScript**, and **Tailwind CSS**. It includes features like real-time drone position tracking, interactive map layers, and dynamic UI toggles. The project leverages **Leaflet** for mapping, **React Leaflet** for seamless React integration, **Zustand** for state management, and **Lucide React** for modern icons. Essential configurations for ESLint and Prettier are included to maintain code quality and consistency.
 
 ---
 
@@ -10,6 +10,10 @@ This is a boilerplate project built with **Vite**, **React**, **TypeScript**, an
 - **Vite**: Fast build tool and development server.
 - **React + TypeScript**: Modern React with type safety.
 - **Tailwind CSS**: Utility-first CSS framework.
+- **Leaflet**: Powerful mapping library for interactive maps.
+- **React Leaflet**: React integration for Leaflet to simplify map rendering and interactivity.
+- **Zustand**: Lightweight and scalable state management for drone and UI states.
+- **Lucide React**: Modern and customizable SVG icon library for building sleek user interfaces.
 - **ESLint**: Linting for JavaScript and TypeScript with strict rules.
 - **Prettier**: Code formatter for consistent styling.
 - **Hot Module Replacement (HMR)**: Instant feedback during development.
@@ -67,6 +71,15 @@ This is a boilerplate project built with **Vite**, **React**, **TypeScript**, an
 
 ## Configuration
 
+### Leaflet + React Leaflet
+The project uses Leaflet for map rendering and React Leaflet for React integration. Drone positions are displayed as markers on an interactive map with dynamic icons based on state.
+
+### Zustand
+Zustand is used for state management, including tracking drone positions, map settings, and UI toggles like stats and control panels.
+
+### Lucide React
+Icons are implemented using Lucide React for modern and lightweight SVG icons.
+
 ### ESLint
 The project uses ESLint with:
 - **@typescript-eslint** for TypeScript linting.
@@ -76,15 +89,3 @@ The project uses ESLint with:
 
 ### Tailwind CSS
 Tailwind is configured for a utility-first approach. The configuration is in `tailwind.config.js`.
-
----
-
-## Contribution
-
-Feel free to fork the repository and submit pull requests for improvements or bug fixes.
-
----
-
-## License
-
-This project is open-source and available under the MIT License.

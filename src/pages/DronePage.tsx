@@ -1,39 +1,36 @@
 import {
   createContext,
-  forwardRef,
   useContext,
   useEffect,
   useState,
 } from "react";
 
 // Leaflet related
-import * as L from "leaflet";
 import { Map as LeafletMap } from "leaflet";
-import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 // Zustand
 import { useShallow } from "zustand/react/shallow";
 
 // Icons
-import { SlidersHorizontal, ChartColumnIncreasing, Layers, TreePine } from "lucide-react";
+import { SlidersHorizontal, ChartColumnIncreasing, Layers } from "lucide-react";
 
 // Components
 import ToggleButton from "../components/buttons/ToggleButton";
+import XmasToggleButton from "../components/buttons/XmasToggleButton";
+import AddDroneButton from "../components/buttons/AddDroneButton";
+
 import DroneControls from "../components/DroneControls";
 import DroneStats from "../components/DroneStats";
-import AddDroneButton from "../components/buttons/AddDroneButton";
 import DroneMarker from "../components/DroneMarker";
 import DroneList from "../components/DroneList";
-import DroneLocation from "../components/xx_DroneLocation";
+import DroneLocation from "../components/DroneLocation";
+
+import { MapArea } from "../components/MapArea";
 
 // Stores
 import useUIStore from "../store/useUIStore";
-import useDroneStore, { Coordinates } from "../store/useDroneStore";
-
-
-const DEFAULT_COORDINATES: Coordinates = [52.40449808679747, 4.888000509250281]; // Office Avalor
-const DEFAULT_ZOOM = 13;
+import useDroneStore from "../store/useDroneStore";
 
 export default function DronePage() {
   const isStatsActive = useUIStore((state) => state.isStatsActive);
@@ -44,6 +41,7 @@ export default function DronePage() {
   const isMapLayer1Active = useUIStore((state) => state.isMapLayer1Active);
   const isMapLayer2Active = useUIStore((state) => state.isMapLayer2Active);
 
+  const isXmasActive = useUIStore((state) => state.isXmasActive);
 
   const toggleStats = useUIStore((state) => state.toggleStats);
   const toggleControls = useUIStore((state) => state.toggleControls);
@@ -53,6 +51,8 @@ export default function DronePage() {
   const toggleMapLayer1 = useUIStore((state) => state.toggleMapLayer1);
   const toggleMapLayer2 = useUIStore((state) => state.toggleMapLayer2);
 
+  const toggleisXmasMode = useUIStore((state) => state.toggleisXmasMode);
+
 
   const [drones, getSelectedDrone, selectDrone] = useDroneStore(
     useShallow((state) => [
@@ -61,14 +61,15 @@ export default function DronePage() {
       state.selectDrone,
     ])
   );
-  const [mapInstance, setMapInstance] = useState<LeafletMap | null>(null);
 
+  const [mapInstance, setMapInstance] = useState<LeafletMap | null>(null);
   const initialCenter = getSelectedDrone()?.position;
 
   useEffect(() => {
     const deselect = () => {
       selectDrone(null);
     };
+
     mapInstance?.on("click", deselect);
 
     return () => {
@@ -128,13 +129,10 @@ export default function DronePage() {
               >
                 Layer-2
               </ToggleButton>
-              <ToggleButton
-                Icon={TreePine}
-                onToggle={toggleMapLayer2}
-                isActive={isMapLayer2Active}
-              >
-                Christmas
-              </ToggleButton>
+              <XmasToggleButton
+                onToggle={toggleisXmasMode}
+                isActive={isXmasActive}
+              />
             </div>
           </div>
         </div>
@@ -151,7 +149,7 @@ export default function DronePage() {
             ))}
           </MapArea>
 
-          <div className="absolute flex w-full h-full top-0 left-0 z-[10000] pointer-events-none [&>*]:pointer-events-auto">
+          <div className="absolute flex w-full h-full top-0 left-0 z-[10000]">
             {mapInstance && (
               <>
                 <DroneLocation />
@@ -180,48 +178,3 @@ export const useMapInstance = () => {
   const ctx = useContext(MapContext);
   return ctx;
 };
-
-const MapArea = forwardRef
-  <L.Map,
-    {
-      children?: React.ReactNode;
-      startPosition?: Coordinates;
-      zoom?: number;
-      isLayer1Active?: boolean;
-      isLayer2Active?: boolean;
-    }
-  >(
-    (
-      {
-        children,
-        startPosition = DEFAULT_COORDINATES,
-        zoom = DEFAULT_ZOOM,
-        isLayer1Active = false,
-        isLayer2Active = false,
-      },
-      ref
-    ) => {
-
-      const mapKey = `${isLayer1Active ? "layer1" : ""}-${isLayer2Active ? "layer2" : ""}`;
-
-      return (
-        <MapContainer
-          key={mapKey}
-          className={
-            `h-full w-full 
-          ${isLayer1Active ? "layer1" : ""}
-          ${isLayer2Active ? "layer2" : ""}
-        `}
-          center={startPosition}
-          zoom={zoom}
-          ref={ref}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {children}
-        </MapContainer>
-      );
-    }
-  );

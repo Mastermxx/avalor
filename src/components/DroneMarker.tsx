@@ -7,6 +7,9 @@ import { useShallow } from "zustand/react/shallow";
 
 // Stores
 import useDroneStore, { Drone } from "../store/useDroneStore";
+import useUIStore from "../store/useUIStore";
+
+import ReindeerIcon from '../assets/reindeer_50x50.png';
 
 function DroneIcon2({
   fill = "#000000",
@@ -43,46 +46,47 @@ function DroneIcon2({
 
 
 export default function DroneMarker({ drone }: { drone: Drone }) {
-    const [selectDrone, selectedDroneId] = useDroneStore(
-      useShallow((state) => [state.selectDrone, state.selectedDroneId])
-    );
-  
-    // const droneIcon = new L.Icon({
-    // iconUrl: DroneIcon,
-    // iconSize: : [32, 32],
-    // }
-  
-    const isSelectedDrone = drone.id == selectedDroneId;
-    const droneIcon = L.divIcon({
-      html: renderToString(
-        <DroneIcon2
-          fill={isSelectedDrone ? "#ff8f00" : ""}
-          stroke={isSelectedDrone ? "black" : ""}
-        />
-      ),
-      iconSize: isSelectedDrone ? [40, 40] : [32, 32],
-      className: "bg-transparent",
-    });
-  
-    return (
-      <Marker
-        interactive
-        position={drone.position}
-        icon={droneIcon}
-        eventHandlers={{
-          click: () => {
-            selectDrone(drone.id);
-          },
-        }}
-      >
-        <Popup>
-          <strong>Drone ID:</strong> {drone.id}
-          <br />
-          <strong>Latitude:</strong> {drone.position[0].toFixed(5)}
-          <br />
-          <strong>Longitude:</strong> {drone.position[1].toFixed(5)}
-        </Popup>
-      </Marker>
-    );
-  }
-  
+
+const isXmasActive = useUIStore((state) => state.isXmasActive);
+
+  const [selectDrone, selectedDroneId] = useDroneStore(
+    useShallow((state) => [state.selectDrone, state.selectedDroneId])
+  );
+
+  const reindeerIcon = new L.Icon({
+    iconUrl: ReindeerIcon,
+  });
+
+  const isSelectedDrone = drone.id == selectedDroneId;
+  const droneIcon = L.divIcon({
+    html: renderToString(
+      <DroneIcon2
+        fill={isSelectedDrone ? "#ff8f00" : ""}
+        stroke={isSelectedDrone ? "black" : ""}
+      />
+    ),
+    iconSize: isSelectedDrone ? [40, 40] : [32, 32],
+    className: "bg-transparent",
+  });
+
+  return (
+    <Marker
+      interactive
+      position={drone.position}
+      icon={isXmasActive ? reindeerIcon : droneIcon}
+      eventHandlers={{
+        click: () => {
+          selectDrone(drone.id);
+        },
+      }}
+    >
+      <Popup>
+        <strong>Drone ID:</strong> {drone.id}
+        <br />
+        <strong>Latitude:</strong> {drone.position[0].toFixed(5)}
+        <br />
+        <strong>Longitude:</strong> {drone.position[1].toFixed(5)}
+      </Popup>
+    </Marker>
+  );
+}
