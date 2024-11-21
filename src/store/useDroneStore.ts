@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
-type Coordinates = [number, number];
+export type Coordinates = [number, number];
 
-type Drone = {
+export type Drone = {
   id: string;
   position: Coordinates;
 };
@@ -14,7 +14,7 @@ type DroneState = {
   selectedDroneId: DroneId | null;
   addDrone: (id: DroneId, position: Coordinates) => void;
   removeDrone: (id: DroneId) => void;
-  selectDrone: (id: DroneId) => void;
+  selectDrone: (id: DroneId | null) => void;
   setPosition: (id: DroneId, position: Coordinates) => void;
   getSelectedDrone: () => Drone | null;
   getDrone: (id: DroneId) => Drone | null;
@@ -23,7 +23,7 @@ type DroneState = {
 const useDroneStore = create<DroneState>((set, get) => ({
   drones: [
     {
-      id: "DEFAULT",
+      id: "#1 R2-D2",
       position: [52.40449808679747, 4.888000509250281],
     },
   ],
@@ -31,7 +31,6 @@ const useDroneStore = create<DroneState>((set, get) => ({
   getDrone: (id) => get().drones.find((d) => d.id == id) ?? null,
 
   getSelectedDrone: () => {
-    console.log("getSelectedDrone");
     const id = get().selectedDroneId;
     if (!id) {
       return null;

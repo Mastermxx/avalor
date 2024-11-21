@@ -1,41 +1,40 @@
 import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
-import useDroneStore from "../store/useDroneStore";
+import useDroneStore, { Coordinates } from "../store/useDroneStore";
+
 import { useShallow } from "zustand/react/shallow";
 import { useEffect } from "react";
 
-export default function DroneControls({}: {
-  onMove: (x: number, y: number) => void;
+import { useMapInstance } from "../pages/DronePage";
+
+export default function DroneControls({
+  className = "",
+}: {
+  className?: string;
 }) {
-  const [getDrone, setPosition, selectedDroneId] = useDroneStore(
-    useShallow((s) => [s.getDrone, s.setPosition, s.selectedDroneId])
+  const [setPosition, selectedDroneId, getSelectedDrone] = useDroneStore(
+    useShallow((s) => [s.setPosition, s.selectedDroneId, s.getSelectedDrone])
   );
 
-  console.log({ selectedDroneId });
+  const map = useMapInstance();
 
+  const drone = getSelectedDrone();
   const onMove = (x: number, y: number) => {
-    console.log("onMove");
-    console.log(selectedDroneId);
-    if (!selectedDroneId) {
-      // do something?
-      return;
-    }
-
-    const drone = getDrone(selectedDroneId);
-
     if (!drone) {
-      // do something?
+      console.warn("onMove called without a drone selected.");
       return;
     }
 
-    setPosition(drone.id, [
+    const newPosition: Coordinates = [
       drone.position[0] + x * 0.001,
       drone.position[1] + y * 0.001,
-    ]);
+    ];
+
+    setPosition(drone.id, newPosition);
+
+    map?.setView(newPosition);
   };
-  // Attach the keydown listener directly
+
   const handleKeyDown = (event: KeyboardEvent) => {
-    console.log("handlekeydown");
-    console.log(event.key);
     switch (event.key) {
       case "ArrowUp":
         onMove(1, 0);
@@ -52,13 +51,9 @@ export default function DroneControls({}: {
       default:
         break;
     }
-
-    event.stopPropagation();
-    event.preventDefault();
   };
 
   useEffect(() => {
-    // Attach the listener once
     if (typeof window !== "undefined") {
       window.addEventListener("keydown", handleKeyDown);
     }
@@ -66,22 +61,23 @@ export default function DroneControls({}: {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [selectedDroneId]);
+  }, [selectedDroneId, drone?.position[0], drone?.position[1]]);
 
   if (!selectedDroneId) {
     return null;
   }
 
   return (
-    <div className="absolute bottom-2 left-1/2 translate-x-[-50%] z-[1000] flex flex-row gap-2">
+    <div className={`flex flex-row gap-2 ${className}`}>
+      {/* Components van maken: */}
       <button
-        onClick={() => onMove(0, -1)}
+        onClick={(e) => onMove(0, -1)}
         className="bg-stone-800 text-white p-5 rounded-lg"
       >
         <ArrowLeft />
       </button>
       <button
-        onClick={() => onMove(0, 1)}
+        onClick={(e) => onMove(0, 1)}
         className="bg-stone-800 text-white p-5 rounded-lg"
       >
         <ArrowRight />
@@ -90,7 +86,7 @@ export default function DroneControls({}: {
         onClick={() => onMove(-1, 0)}
         className="bg-stone-800 text-white p-5 rounded-lg"
       >
-        <ArrowDown />
+        <ArrowDown className="pointer-events-none" />
       </button>
       <button
         onClick={() => onMove(1, 0)}
