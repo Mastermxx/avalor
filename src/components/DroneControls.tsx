@@ -71,13 +71,13 @@ export default function DroneControls({
     <div className={`flex flex-row gap-2 ${className}`}>
       {/* Components van maken: */}
       <button
-        onClick={(e) => onMove(0, -1)}
+        onClick={() => onMove(0, -1)}
         className="bg-stone-800 text-white p-5 rounded-lg"
       >
         <ArrowLeft />
       </button>
       <button
-        onClick={(e) => onMove(0, 1)}
+        onClick={() => onMove(0, 1)}
         className="bg-stone-800 text-white p-5 rounded-lg"
       >
         <ArrowRight />

@@ -42,7 +42,7 @@ export default function Dronelist() {
             <div className="flex flex-col gap-2">
               <button
                 onClick={() => console.log("Edit Position for", selectedDroneId)}
-                className="bg-[#14296a] hover:bg-[#143c6a] text-white p-2 rounded-lg w-full"
+                className="bg-[#ff8f00] hover:bg-[#fdaf48] text-white p-2 rounded-lg w-full"
               >
                 Edit Position
               </button>

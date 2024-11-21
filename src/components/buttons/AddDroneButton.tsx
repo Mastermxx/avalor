@@ -42,7 +42,7 @@ export default function AddDroneButton({ className }: { className?: string }) {
     return (
       <button
         onClick={handleAddDrone}
-        className={`bg-[#14296a] hover:bg-[#143c6a] text-white p-2 rounded-lg ${className}`}
+        className={`bg-[#ff8f00] hover:bg-[#fdaf48] text-white p-2 rounded-lg ${className}`}
       > +
         Add Drone
       </button>

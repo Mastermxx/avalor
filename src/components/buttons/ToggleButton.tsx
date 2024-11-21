@@ -21,7 +21,7 @@ export default function ToggleButton({ children, Icon, onToggle, isActive }: Tog
         flex flex-col justify-center text-center items-center
         w-20 h-20 p-5 rounded-lg text-sm
         hover:bg-[#1c1c1e] hover:text-[#fafafa] hover:border-white
-        ${isActive ? 'bg-[#101010] text-[#fafafa] border-2 border-white' : 'border-2 border-[#262626]'}
+        ${isActive ? 'bg-[#101010] text-[#fafafa] border-2 border-[#ff8f00]' : 'border-2 border-[#6a6a6e]'}
       `}
     >
       <Icon />
