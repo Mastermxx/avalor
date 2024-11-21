@@ -57,6 +57,7 @@ export default function DroneMarker({ drone }: { drone: Drone }) {
       html: renderToString(
         <DroneIcon2
           fill={isSelectedDrone ? "#ff8f00" : ""}
+          stroke={isSelectedDrone ? "black" : ""}
         />
       ),
       iconSize: isSelectedDrone ? [40, 40] : [32, 32],

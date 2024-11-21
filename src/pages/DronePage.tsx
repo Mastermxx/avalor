@@ -16,7 +16,7 @@ import "leaflet/dist/leaflet.css";
 import { useShallow } from "zustand/react/shallow";
 
 // Icons
-import { SlidersHorizontal, ChartColumnIncreasing, Layers } from "lucide-react";
+import { SlidersHorizontal, ChartColumnIncreasing, Layers, TreePine } from "lucide-react";
 
 // Components
 import ToggleButton from "../components/buttons/ToggleButton";
@@ -80,54 +80,62 @@ export default function DronePage() {
     <MapContext.Provider value={mapInstance}>
       <div className="relative h-full w-full rounded-3xl overflow-hidden flex">
         <div className="flex flex-col text-center gap-2 justify-between text-[#858585] bg-[#1c1c1e] p-5 max-w-30">
-          <div className="flex flex-col gap-2">
-            Drone Options
-            <ToggleButton
-              Icon={ChartColumnIncreasing}
-              onToggle={toggleStats}
-              isActive={isStatsActive}
-            >
-              Stats
-            </ToggleButton>
-            <ToggleButton
-              Icon={SlidersHorizontal}
-              onToggle={toggleControls}
-              isActive={isControlActive}
-            >
-              Controls
-            </ToggleButton>
-            <ToggleButton
-              Icon={SlidersHorizontal}
-              onToggle={toggleDroneList}
-              isActive={isDroneListActive}
-            >
-              Drone List
-            </ToggleButton>
-
-
-            Map Options
-            {/* <MapLayers /> */}
-            <ToggleButton
-              Icon={Layers}
-              onToggle={toggleMapLayerDefault}
-              isActive={isMapLayerDefaultActive}
-            >
-              Default
-            </ToggleButton>
-            <ToggleButton
-              Icon={Layers}
-              onToggle={toggleMapLayer1}
-              isActive={isMapLayer1Active}
-            >
-              Layer-1
-            </ToggleButton>
-            <ToggleButton
-              Icon={Layers}
-              onToggle={toggleMapLayer2}
-              isActive={isMapLayer2Active}
-            >
-              Layer-2
-            </ToggleButton>
+          <div className="flex flex-col items-center gap-2 justify-between h-full">
+            <div className="flex flex-col gap-2">
+              <p className="text-xs font-bold">Drone Options</p>
+              <ToggleButton
+                Icon={ChartColumnIncreasing}
+                onToggle={toggleStats}
+                isActive={isStatsActive}
+              >
+                Stats
+              </ToggleButton>
+              <ToggleButton
+                Icon={SlidersHorizontal}
+                onToggle={toggleControls}
+                isActive={isControlActive}
+              >
+                Controls
+              </ToggleButton>
+              <ToggleButton
+                Icon={SlidersHorizontal}
+                onToggle={toggleDroneList}
+                isActive={isDroneListActive}
+              >
+                Drone List
+              </ToggleButton>
+            </div>
+            <div className="flex flex-col gap-2">
+              <p className="text-xs font-bold">Map Options</p>
+              <ToggleButton
+                Icon={Layers}
+                onToggle={toggleMapLayerDefault}
+                isActive={isMapLayerDefaultActive}
+              >
+                Default
+              </ToggleButton>
+              <ToggleButton
+                Icon={Layers}
+                onToggle={toggleMapLayer1}
+                isActive={isMapLayer1Active}
+              >
+                Layer-1
+              </ToggleButton>
+              <ToggleButton
+                Icon={Layers}
+                onToggle={toggleMapLayer2}
+                isActive={isMapLayer2Active}
+              >
+                Layer-2
+              </ToggleButton>
+              <ToggleButton
+                Icon={TreePine}
+                onToggle={toggleMapLayer2}
+                isActive={isMapLayer2Active}
+              >
+                Christmas
+              </ToggleButton>
+            </div>
           </div>
         </div>
 
@@ -144,9 +152,10 @@ export default function DronePage() {
           </MapArea>
 
           <div className="absolute flex w-full h-full top-0 left-0 z-[10000] pointer-events-none [&>*]:pointer-events-auto">
-            {/* First paint the map instance will be null: */}
             {mapInstance && (
               <>
+                <DroneLocation />
+
                 {isControlActive && (
                   <DroneControls className="absolute bottom-4 left-1/2 -translate-x-1/2" />
                 )}
@@ -156,9 +165,6 @@ export default function DronePage() {
                 {isStatsActive && <DroneStats />}
 
                 {isDroneListActive && <DroneList />}
-
-                <DroneLocation />
-
               </>
             )}
           </div>
@@ -175,47 +181,47 @@ export const useMapInstance = () => {
   return ctx;
 };
 
-const MapArea = forwardRef<
-  L.Map,
-  {
-    children?: React.ReactNode;
-    startPosition?: Coordinates;
-    zoom?: number;
-    isLayer1Active?: boolean;
-    isLayer2Active?: boolean;
-  }
->(
-  (
+const MapArea = forwardRef
+  <L.Map,
     {
-      children,
-      startPosition = DEFAULT_COORDINATES,
-      zoom = DEFAULT_ZOOM,
-      isLayer1Active = false,
-      isLayer2Active = false,
-    },
-    ref
-  ) => {
+      children?: React.ReactNode;
+      startPosition?: Coordinates;
+      zoom?: number;
+      isLayer1Active?: boolean;
+      isLayer2Active?: boolean;
+    }
+  >(
+    (
+      {
+        children,
+        startPosition = DEFAULT_COORDINATES,
+        zoom = DEFAULT_ZOOM,
+        isLayer1Active = false,
+        isLayer2Active = false,
+      },
+      ref
+    ) => {
 
-    const mapKey = `${isLayer1Active ? "layer1" : ""}-${isLayer2Active ? "layer2" : ""}`;
+      const mapKey = `${isLayer1Active ? "layer1" : ""}-${isLayer2Active ? "layer2" : ""}`;
 
-    return (
-      <MapContainer
-        key={mapKey}
-        className={
-          `h-full w-full 
+      return (
+        <MapContainer
+          key={mapKey}
+          className={
+            `h-full w-full 
           ${isLayer1Active ? "layer1" : ""}
           ${isLayer2Active ? "layer2" : ""}
         `}
-        center={startPosition}
-        zoom={zoom}
-        ref={ref}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {children}
-      </MapContainer>
-    );
-  }
-);
+          center={startPosition}
+          zoom={zoom}
+          ref={ref}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {children}
+        </MapContainer>
+      );
+    }
+  );
